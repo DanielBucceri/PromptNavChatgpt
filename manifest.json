@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "ChatGPT Prompt Navigator",
+  "version": "1.0",
+  "description": "Adds a navbar with links to each user prompt in ChatGPT.",
+  "permissions": ["activeTab", "scripting"],
+  "content_scripts": [
+    {
+      "matches": [
+      "https://chat.openai.com/*",
+      "https://chatgpt.com/*"
+    ],
+    "js": ["src/content.js"],
+    "css": ["src/styles.css"]
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

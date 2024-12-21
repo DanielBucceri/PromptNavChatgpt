@@ -1,0 +1,45 @@
+/* styles.css */
+
+/* Navbar Container */
+#prompt-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #2d2d2d;
+  color: #ffffff;
+  padding: 10px;
+  z-index: 1000;
+  overflow-x: auto;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  font-family: Arial, sans-serif;
+}
+
+/* Unordered List */
+#prompt-navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 15px;
+  margin: 0;
+  padding: 0;
+}
+
+/* List Items */
+#prompt-navbar li {
+}
+
+/* Links */
+#prompt-navbar a {
+  color: #61dafb;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+#prompt-navbar a:hover {
+  text-decoration: underline;
+}
+
+/* Body Padding to Prevent Content Overlap */
+body {
+  padding-top: 50px; /* Adjust based on navbar height */
+}
