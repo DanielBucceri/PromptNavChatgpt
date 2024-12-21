@@ -1,111 +1,105 @@
 // content.js
 
-// Function to create the navbar
-function createNavbar(prompts) {
-  // Remove any existing navbar to avoid duplicates
-  const existingNavbar = document.getElementById('prompt-navbar');
-  if (existingNavbar) {
-    existingNavbar.remove();
-  }
+// Function to create the drop-down menu
+function createDropdownMenu(prompts) {
+  // Create menu container
+  const menuContainer = document.createElement('div');
+  menuContainer.id = 'prompt-dropdown-container';
 
-  // Create navbar container
-  const navbar = document.createElement('div');
-  navbar.id = 'prompt-navbar';
+  // Create toggle button
+  const toggleButton = document.createElement('button');
+  toggleButton.id = 'prompt-toggle-button';
+  toggleButton.innerHTML = '☰ Prompts'; // Hamburger icon with text
 
-  // Style the navbar (if styles.css isn't enough)
-  navbar.style.position = 'fixed';
-  navbar.style.top = '0';
-  navbar.style.left = '0';
-  navbar.style.width = '100%';
-  navbar.style.backgroundColor = '#2d2d2d';
-  navbar.style.color = '#ffffff';
-  navbar.style.padding = '10px';
-  navbar.style.zIndex = '1000';
-  navbar.style.overflowX = 'auto';
-  navbar.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.3)';
-  navbar.style.fontFamily = 'Arial, sans-serif';
+  // Create dropdown content
+  const dropdownContent = document.createElement('div');
+  dropdownContent.id = 'prompt-dropdown-content';
+  dropdownContent.style.display = 'none'; // Initially hidden
 
-  // Create the list of links
-  const list = document.createElement('ul');
-  list.style.listStyle = 'none';
-  list.style.display = 'flex';
-  list.style.gap = '15px';
-  list.style.margin = '0';
-  list.style.padding = '0';
-
+  // Populate dropdown with prompt summaries
   prompts.forEach((prompt, index) => {
-    const listItem = document.createElement('li');
-    const link = document.createElement('a');
-    link.href = `#prompt-${index}`;
-    link.textContent = `Prompt ${index + 1}`;
-    link.style.color = '#61dafb';
-    link.style.textDecoration = 'none';
-    link.style.fontSize = '14px';
-
-    // Add hover effect
-    link.addEventListener('mouseover', () => {
-      link.style.textDecoration = 'underline';
-    });
-    link.addEventListener('mouseout', () => {
-      link.style.textDecoration = 'none';
-    });
-
-    listItem.appendChild(link);
-    list.appendChild(listItem);
+    const promptLink = document.createElement('a');
+    promptLink.href = `#prompt-${index}`;
+    promptLink.className = 'prompt-link';
+    promptLink.textContent = summarizePrompt(prompt.text);
+    dropdownContent.appendChild(promptLink);
 
     // Assign an ID to the prompt element for navigation
     prompt.element.id = `prompt-${index}`;
   });
 
-  navbar.appendChild(list);
-  document.body.prepend(navbar);
+  // Append toggle button and dropdown content to container
+  menuContainer.appendChild(toggleButton);
+  menuContainer.appendChild(dropdownContent);
+  document.body.prepend(menuContainer);
+
+  // Toggle dropdown visibility on button click
+  toggleButton.addEventListener('click', () => {
+    const isVisible = dropdownContent.style.display === 'block';
+    dropdownContent.style.display = isVisible ? 'none' : 'block';
+  });
 }
 
 // Function to extract prompts from the page
 function extractPrompts() {
-  try {
-    // Modify the selector based on ChatGPT's DOM structure
-    const promptElements = document.querySelectorAll('div.whitespace-pre-wrap');
-    const prompts = [];
+  // Modify the selector based on ChatGPT's actual DOM structure
+  const promptElements = document.querySelectorAll('div.whitespace-pre-wrap');
+  const prompts = [];
 
-    promptElements.forEach(element => {
-      // Optionally, add checks to ensure it's a user prompt
-      prompts.push({ text: element.innerText, element });
-    });
+  promptElements.forEach(element => {
+    // Optionally, add checks to ensure it's a user prompt
+    prompts.push({ text: element.innerText, element });
+  });
 
-    return prompts;
-  } catch (error) {
-    console.error('Error extracting prompts:', error);
-    return [];
-  }
+  return prompts;
 }
 
-// Function to initialize the navbar
-function initNavbar() {
+// Function to summarize a prompt (e.g., first 50 characters)
+function summarizePrompt(text) {
+  const maxLength = 50;
+  return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+}
+
+// Function to initialize the dropdown menu
+function initDropdown() {
   const prompts = extractPrompts();
   if (prompts.length > 0) {
-    createNavbar(prompts);
+    createDropdownMenu(prompts);
   }
 }
 
-// Debounce function to improve performance
-function debounce(func, wait) {
-  let timeout;
-  return function (...args) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), wait);
-  };
+// Initialize the dropdown on page load
+window.addEventListener('load', initDropdown);
+
+// Optional: Observe DOM changes in case of dynamic content loading
+const observer = new MutationObserver(() => {
+  // Remove existing dropdown to prevent duplicates
+  const existingContainer = document.getElementById('prompt-dropdown-container');
+  if (existingContainer) existingContainer.remove();
+
+  // Re-initialize dropdown
+  initDropdown();
+});
+// Function to highlight the target prompt
+function highlightPrompt(element) {
+  element.style.transition = 'background-color 0.5s';
+  const originalColor = element.style.backgroundColor;
+  element.style.backgroundColor = '#ffff99'; // Light yellow highlight
+
+  setTimeout(() => {
+    element.style.backgroundColor = originalColor || '';
+  }, 2000);
 }
 
-// Initialize the navbar on page load
-window.addEventListener('load', initNavbar);
-
-// Observe DOM changes for dynamic content loading
-const observer = new MutationObserver(
-  debounce(() => {
-    initNavbar();
-  }, 300) // Adjust debounce delay as needed
-);
-
+// Update the click event listener in createDropdownMenu
+link.addEventListener('click', (e) => {
+  e.preventDefault();
+  const target = document.querySelector(link.getAttribute('href'));
+  if (target) {
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    highlightPrompt(target);
+  }
+});
 // Start observing the body for changes
 observer.observe(document.body, { childList: true, subtree: true });
+

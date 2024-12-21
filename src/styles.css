@@ -1,45 +1,81 @@
 /* styles.css */
 
-/* Navbar Container */
-#prompt-navbar {
+/* Dropdown Container */
+#prompt-dropdown-container {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: #2d2d2d;
-  color: #ffffff;
-  padding: 10px;
+  top: 20px;
+  right: 20px;
+  width: 200px; /* Approximately 20% width */
   z-index: 1000;
-  overflow-x: auto;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   font-family: Arial, sans-serif;
 }
 
-/* Unordered List */
-#prompt-navbar ul {
-  list-style: none;
-  display: flex;
-  gap: 15px;
-  margin: 0;
-  padding: 0;
+/* Toggle Button */
+#prompt-toggle-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50; /* Green background */
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* List Items */
-#prompt-navbar li {
+#prompt-toggle-button:hover {
+  background-color: #45a049;
 }
 
-/* Links */
-#prompt-navbar a {
-  color: #61dafb;
+/* Dropdown Content */
+#prompt-dropdown-content {
+  margin-top: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  max-height: 400px; /* Adjust as needed */
+  overflow-y: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Prompt Links */
+.prompt-link {
+  display: block;
+  padding: 10px;
+  color: #333;
   text-decoration: none;
-  font-size: 14px;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.3s;
 }
 
-#prompt-navbar a:hover {
-  text-decoration: underline;
+.prompt-link:last-child {
+  border-bottom: none;
 }
 
-/* Body Padding to Prevent Content Overlap */
-body {
-  padding-top: 50px; /* Adjust based on navbar height */
+.prompt-link:hover {
+  background-color: #f1f1f1;
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  #prompt-dropdown-container {
+    width: 150px;
+    top: 10px;
+    right: 10px;
+  }
+
+  #prompt-toggle-button {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .prompt-link {
+    padding: 8px;
+    font-size: 14px;
+  }
 }
